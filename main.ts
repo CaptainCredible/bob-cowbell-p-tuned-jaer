@@ -11,7 +11,8 @@ let flip = false
 let myOnTimer = 0
 //let outputABuffer = 0
 let outPut = 0
-let perxles: neopixel.Strip = null
+let strip = neopixel.create(DigitalPin.P0, 16, NeoPixelMode.RGB)
+strip.showRainbow(1,360);
 let midiChannel: midi.MidiController = null
 let anOutputIsOn = false
 let incrementor = 0
@@ -30,9 +31,9 @@ let myPins: number[]
 basic.showLeds(`
     . # # # .
     # . . . #
-    # . # . #
     # . . . #
-    . # # # .
+    # . . . #
+    # # # # #
     `)
 radio.onReceivedValue(function (name, value) {
     if (!muted) {
@@ -81,8 +82,8 @@ function handlePinOuts() {
 }
 function handleNeoPixies() {
     for (let indeks = 0; indeks <= 2; indeks++) {
-        perxles.setPixelColor(myNote + indeks, neopixel.colors(NeoPixelColors.Red))
-        perxles.show()
+        strip.setPixelColor(myNote + indeks, neopixel.colors(NeoPixelColors.Red))
+        strip.show()
     }
 }
 function sendMidi() {
@@ -153,11 +154,12 @@ function handleMCP23017offs() {
     }
 }
 function turnOffAllLeds() {
-    perxles.clear()
-    perxles.show()
+    strip.clear()
+    strip.show()
 }
 
 basic.pause(500)
+strip.showColor(neopixel.colors(NeoPixelColors.Black))
 MCP23017.setPortAsOutput(ADDRESS.A20, SET_PORT.A)
 MCP23017.setPortAsOutput(ADDRESS.A20, SET_PORT.B)
 myOnTime = 15
